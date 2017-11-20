@@ -1,0 +1,171 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>Highcharts Example</title>
+    <style type="text/css">
+        *{ margin:0; padding:0;}
+        ul,li{ list-style:none;}
+        body{ background: url("img/bg.jpg") no-repeat left bottom #000 fixed; }
+        .container-box{ width: 98%; margin: 0 auto; margin-top: 10px;}
+        .container-bg{  width: 100%; height: 16px;
+            background: -ms-linear-gradient( left, #b48a40, #b48a40,#000,#000 );                             /* IE 10 */
+            background: -moz-linear-gradient( left, #b48a40, #b48a40,#000,#000 );                            /*火狐*/
+            background:-webkit-gradient(linear, 0% 0%, 0% 100%,from(#000), to(#b48a40));                     /*谷歌*/
+            background: -webkit-linear-gradient( left, #b48a40, #b48a40,#000,#000 );                         /*Safari5.1 Chrome 10+*/
+            background: -o-linear-gradient( left, #b48a40, #b48a40,#000,#000 );                              /*Opera 11.10+*/
+        }
+        .container,.title,.container-cont{ position: absolute; left: 0; top:0;}
+        .subtitle,.subtitle2{ display: block; width: 530px; overflow: hidden }
+        .subtitle em{ font-style:normal; line-height: 28px;}
+        .subtitle b{ font:bold 24px/24px '微软雅黑'; padding-left: 30px; }
+        .subtitle2{ margin-top: -10px;}
+        .subtitle2 span{  float: right; width: 420px;  text-align: right; color: #3b64b4;  font:normal 13px/18px '微软雅黑';}
+        .subtitle2 span em,.subtitle2 span i{ font-style:normal; }
+        .subtitle2 span i{ float: right; width: 100px;}
+        .container-cont{ top:650px; left:580px; width: 650px; height:165px;  border: #131648 1px solid;}
+        .container-cont ul{ padding-top: 10px;}
+        .container-cont li{ float: left; color:#fff; font:normal 14px/30px '微软雅黑'; padding: 0 28px 0 28px;}
+        .container-cont li:nth-child(1) span:nth-child(1) em{ color: #e45573;}
+        .container-cont li:nth-child(1) span:nth-child(2) em{ color: #ffd36c;}
+        .container-cont li:nth-child(1) span:nth-child(3) em{ color: #40f49d;}
+        .container-cont span{ display: block;}
+        .container-cont li em{ font-style:normal; padding-right: 10px; }
+        h2{ width: 100%; text-align: center; font:18px/45px '微软雅黑'; color: #4193ff; background-color: rgba(6,25,68,0.15);}
+
+        /*京东首页实时流量*/
+        #container1{ top:30px; left:0; }
+
+        /*京东列表页实时流量*/
+        #container2{ top:455px; left:0;}
+        .title{ top:25px; left:580px; width:530px; height: 50px; text-align: left; color: #f0e3f4; background-color: #bc3225;}
+        .title h1{ width: 100%; font:italic bold 24px/32px "微软雅黑";  letter-spacing: 3px; text-indent: 5em; }
+        .title p{ display: block; width: 98%; text-align: right; font: bold 14px/14px "微软雅黑";}
+
+        /*首页 列表页 单品页综合数据*/
+        #container3{ top:90px; left:580px;}
+        #container3 .subtitle,#container3 .subtitle2{  width: 530px; }
+        #container3 .subtitle b{ font:bold 48px/48px '微软雅黑'; }
+
+        /*京东单品页实时流量*/
+        #container4{ top:30px; left:1260px;}
+        .container-cont2{ top:535px; left:1260px; width: 560px; height:130px; }
+        .container-cont2 li{ padding: 0 48px 0 48px;}
+        .container-cont2 li:nth-child(1) span:nth-child(1) em{ color: #e45573;}
+        .container-cont2 li:nth-child(1) span:nth-child(2) em{ color: #ffd36c;}
+        .container-cont2 li:nth-child(2) span:nth-child(1) em{ color: #40f49d;}
+        .container-cont3{ top:685px;}
+        .container-cont4{ top:465px; height: 50px;}
+        .container-cont4 h2{ float: left; width: 106px; font-size: 16px; text-align: right;}
+        .container-cont4 li{ padding: 0; }
+        .container-cont4 li span{ display: inline; padding: 0 40px;}
+    </style>
+    <script type="text/javascript" src="js/jquery-1.8.2.js"></script>
+    <script src="js/socket.io.js"></script>
+
+    <script type="text/javascript" src="js/common.js"></script>
+    <script type="text/javascript" src="js/data.js"></script>
+    <script src="https://code.highcharts.com/highcharts.js"></script>
+    <script type="text/javascript" src="js/render-highcharts.js"></script>
+</head>
+
+<body>
+<!--
+想显示图表导出菜单，才引exporting.js，想隐藏则去掉即可
+<script src="https://code.highcharts.com/modules/exporting.js"></script>
+-->
+<div class="container-box">
+    <div class="container-bg"></div>
+    <div class="container" id="container1" style="width: 560px; height: 380px;"></div>
+    <div class="container" id="container2" style="width: 560px; height: 380px;"></div>
+    <div class="title">
+        <h1>网站流量实时数据</h1>
+        <p></p>
+    </div>
+
+    <div class="container" id="container3" style="width: 650px; height: 550px;"></div>
+    <div class="container-cont container-cont1">
+        <h2>三级实时分类</h2>
+        <ul>
+            <li>
+                <span><em>01</em>手机</span>
+                <span><em>02</em>手机</span>
+                <span><em>03</em>手机</span>
+            </li>
+            <li>
+                <span><em>04</em>手机</span>
+                <span><em>05</em>手机</span>
+                <span><em>06</em>手机</span>
+            </li>
+            <li>
+                <span><em>07</em>手机</span>
+                <span><em>08</em>手机</span>
+                <span><em>09</em>手机</span>
+            </li>
+            <li>
+                <span><em>10</em>手机</span>
+                <span><em>11</em>手机</span>
+                <span><em>12</em>手机</span>
+            </li>
+            <li>
+                <span><em>13</em>手机</span>
+                <span><em>14</em>手机</span>
+                <span><em>15</em>手机</span>
+            </li>
+        </ul>
+    </div>
+    <div class="container" id="container4" style="width: 560px; height: 380px;"></div>
+    <div class="container-cont container-cont2 container-cont4">
+        <h2>累积TOP类目</h2>
+        <ul>
+            <li>
+                <span><em>01</em>手机</span>
+                <span><em>02</em>空调</span>
+                <span><em>03</em>笔记本</span>
+            </li>
+
+        </ul>
+    </div>
+    <div class="container-cont container-cont2">
+        <h2>一级实时分类</h2>
+        <ul>
+            <li>
+                <span><em>01</em>电脑、办公</span>
+                <span><em>02</em>手机</span>
+            </li>
+            <li>
+                <span><em>03</em>家用电器</span>
+                <span><em>04</em>服饰内衣</span>
+            </li>
+            <li>
+                <span><em>07</em>运动户外</span>
+                <span><em>08</em>礼品箱包</span>
+            </li>
+        </ul>
+    </div>
+    <div class="container-cont container-cont2 container-cont3">
+        <h2>二级实时分类</h2>
+        <ul>
+            <li>
+                <span><em>01</em>电脑、办公</span>
+                <span><em>02</em>手机</span>
+            </li>
+            <li>
+                <span><em>03</em>家用电器</span>
+                <span><em>04</em>服饰内衣</span>
+            </li>
+            <li>
+                <span><em>07</em>运动户外</span>
+                <span><em>08</em>礼品箱包</span>
+            </li>
+        </ul>
+    </div>
+
+</div>
+<!--
+如果容器没有设定宽高，默认是 宽 400px， 高 400px，另外设置容器的 min-width 属性可以让 highcharts 自适应宽度，
+<div id="container" style="min-width:400px;height:400px"></div>
+特别说明：饼图中可以通过设置宽高来让图形填充满整个容器
+-->
+</body>
+</html>
